@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { parseHistory, filterRecent, buildDistribution } from '../src/analyzer.mjs';
+import { parseHistory, filterRecent, buildDistribution, findPeakPeriod, computeAnchor, isDistributionFlat, formatAnchor } from '../src/analyzer.mjs';
 
 describe('parseHistory', () => {
   let tempDir;
@@ -90,5 +90,68 @@ describe('buildDistribution', () => {
     const dist = buildDistribution([]);
     assert.equal(dist.length, 24);
     assert.equal(dist.reduce((a, b) => a + b, 0), 0);
+  });
+});
+
+describe('findPeakPeriod', () => {
+  it('finds single peak in clear distribution', () => {
+    //                 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+    const dist =      [0, 0, 0, 0, 0, 0, 0, 2, 5, 12,18,15,14,10, 8, 6, 3, 1, 0, 0, 0, 0, 0, 0];
+    const peak = findPeakPeriod(dist);
+    assert.ok(peak);
+    assert.ok(peak.start >= 7);
+    assert.ok(peak.end <= 17);
+    assert.ok(peak.midpoint >= 10 && peak.midpoint <= 13);
+  });
+
+  it('finds the larger peak when two exist', () => {
+    //                 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+    const dist =      [0, 0, 0, 0, 0, 0, 0, 0, 10,15,12, 0, 0, 0, 0, 0, 0, 0, 0, 3, 5, 4, 0, 0];
+    const peak = findPeakPeriod(dist);
+    assert.ok(peak);
+    // Morning peak (10+15+12=37) should win over evening (3+5+4=12)
+    assert.ok(peak.start >= 8 && peak.start <= 9);
+    assert.ok(peak.end >= 10 && peak.end <= 10);
+  });
+
+  it('returns null for all-zero distribution', () => {
+    const dist = new Array(24).fill(0);
+    assert.equal(findPeakPeriod(dist), null);
+  });
+});
+
+describe('computeAnchor', () => {
+  it('subtracts 5 hours from midpoint', () => {
+    assert.equal(computeAnchor(13), 8);     // 13:00 - 5h = 08:00
+    assert.equal(computeAnchor(12.5), 7.5); // 12:30 - 5h = 07:30
+  });
+
+  it('wraps around midnight', () => {
+    assert.equal(computeAnchor(3), 22);     // 03:00 - 5h = 22:00 previous day
+  });
+});
+
+describe('isDistributionFlat', () => {
+  it('returns true when no hour is 2x the average', () => {
+    const dist = [4, 5, 4, 5, 4, 5, 4, 5, 4, 5, 4, 5, 4, 5, 4, 5, 4, 5, 4, 5, 4, 5, 4, 5];
+    assert.equal(isDistributionFlat(dist), true);
+  });
+
+  it('returns false when a clear peak exists', () => {
+    const dist = [0, 0, 0, 0, 0, 0, 0, 0, 5, 20, 18, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    assert.equal(isDistributionFlat(dist), false);
+  });
+
+  it('returns true for all zeros', () => {
+    assert.equal(isDistributionFlat(new Array(24).fill(0)), true);
+  });
+});
+
+describe('formatAnchor', () => {
+  it('formats decimal hours as HH:MM', () => {
+    assert.equal(formatAnchor(8), '08:00');
+    assert.equal(formatAnchor(7.5), '07:30');
+    assert.equal(formatAnchor(22.75), '22:45');
+    assert.equal(formatAnchor(0), '00:00');
   });
 });
